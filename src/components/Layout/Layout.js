@@ -1,7 +1,10 @@
 import ls from './layout.module.css';
 
 const Layout = ({title, description, urlBg, colorBg}) => {
-    const bgStyle = urlBg? {backgroundImage: `url(${urlBg})`}: {background: colorBg};
+    const bgStyle ={
+        backgroundImage: `url(${urlBg})`, 
+        backgroundColor: colorBg
+    };
     return (
       <div>
           <section className={ls.root} style={bgStyle}>

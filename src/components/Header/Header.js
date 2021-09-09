@@ -6,8 +6,8 @@ const Header = ({title, description}) => {
       <header className={hs.root}>
         <div className={hs.forest}></div>
         <div className={hs.container}>
-          <h1>{title}</h1>
-          <p>{description}</p>
+          { title? <h1>{title}</h1>: null }
+          { description? <p>{description}</p>: null } 
           </div>
       </header>
     </div>

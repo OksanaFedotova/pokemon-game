@@ -9,9 +9,9 @@ const App = () => {
   return (
     <>
     <Header title='This is title' descr='This is Description!'/>
-    <Layout title descr urlBg={bg1}/>
-    <Layout title descr colorBg='red'/>
-    <Layout title descr urlBg={bg1}/>
+    <Layout title='Title' descr='Description' urlBg={bg1}/>
+    <Layout title='Title' descr='Description' colorBg='red'/>
+    <Layout title='Title' descr='Description' urlBg={bg1}/>
     <Footer/>
     </>
   )  
