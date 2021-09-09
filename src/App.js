@@ -1,17 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header/Header';
+import Layout from './components/Layout/Layout';
+import Footer from './components/Footer/Footer';
+import bg1 from './assets/bg1.jpeg';
 
-function App() {
+//console.log(bg1);
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hello, world!
-        </p>
-      </header>
-    </div>
-  );
-}
-
+    <>
+    <Header title='This is title' descr='This is Description!'/>
+    <Layout title descr urlBg={bg1}/>
+    <Layout title descr colorBg='red'/>
+    <Layout title descr urlBg={bg1}/>
+    <Footer/>
+    </>
+  )  
+} 
 export default App;
