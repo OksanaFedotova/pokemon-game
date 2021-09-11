@@ -1,6 +1,6 @@
 import ls from './layout.module.css';
 
-const Layout = ({title, description, urlBg, colorBg}) => {
+const Layout = ({title, urlBg, colorBg, children}) => {
     const bgStyle ={
         backgroundImage: `url(${urlBg})`, 
         backgroundColor: colorBg
@@ -14,8 +14,8 @@ const Layout = ({title, description, urlBg, colorBg}) => {
                           <h3>{title}</h3>
                 <span className={ls.separator}></span>
                 </div>
-                <div className={ls.desc.full}>
-                    <p>{description}</p>
+                <div className={`${ls.desc} ${ls.full}`}>
+                    {children}
             </div>
         </article>
     </div>
