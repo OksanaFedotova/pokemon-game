@@ -5,7 +5,7 @@ import { useState } from 'react';
 const PokemonCard = ({type, values, img, name, id}) => {
     const [isActive, setActive] = useState(false);
     const handleCard = () => {
-        setActive(true);
+        isActive? setActive(false): setActive(true);
     }
     return (
     <div className={s.root} onClick={handleCard}>
