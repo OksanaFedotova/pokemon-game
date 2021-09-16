@@ -1,0 +1,19 @@
+.wrap {
+    min-height: calc(100vh - 100px);
+    padding: 96px 32px 24px;
+}
+
+.wrap.isHomePage {
+    padding: 0;
+}
+
+button {
+    background-color: #f300b4; 
+    border: none;
+    color: white;
+    padding: 15px 45px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+}
