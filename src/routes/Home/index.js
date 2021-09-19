@@ -1,6 +1,5 @@
 import Header from '../../components/Header/Header';
 import Layout from '../../components/Layout/Layout';
-import s from './style.module.css';
 
 
 import bg1 from './assets/bg1.jpeg';
