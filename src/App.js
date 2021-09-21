@@ -1,4 +1,3 @@
-//import { useState } from "react";
 import { useRouteMatch, Route, Switch, Redirect } from "react-router-dom";
 import cn from 'classnames';
 
@@ -7,7 +6,9 @@ import Footer from "./components/Footer/Footer";
 import GamePage from "./routes/Game";
 import HomePage from "./routes/Home";
 
-import s from './style.module.css'
+
+import s from './style.module.css';
+
 
 const App = () => {
   const match = useRouteMatch('/');
