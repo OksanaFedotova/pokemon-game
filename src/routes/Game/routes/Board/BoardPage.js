@@ -64,6 +64,8 @@ const BoardPage = () => {
     if(Object.keys(pokemons).length === 0) {
         history.replace('/game');
     };
+    //выбор очередности
+    const [player1Turn, setTurn] = useState(true);
 
     const handleClickBoardPlate = async (position) => {
 
@@ -83,10 +85,20 @@ const BoardPage = () => {
             });
             
             const request = await res.json();
+            console.log(choiceCard, request);
             if(choiceCard.player === 1) {
+                setTurn((prevState) => {
+                    const newState = !prevState;
+                    return newState
+                })
                 setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id));
+
             }
             if(choiceCard.player === 2) {
+                setTurn((prevState) => {
+                    const newState = !prevState;
+                    return newState;
+                })
                 setPlayer2(prevState => prevState.filter(item => item.id !== choiceCard.id));
             }
     
@@ -121,7 +133,7 @@ const BoardPage = () => {
             } else {
                 alert('DRAW');
             }
-
+            pokemonsContext.pokemons = {};
             history.replace('/game/finish');
         }
     }, [steps]);
@@ -133,7 +145,11 @@ const BoardPage = () => {
                     <PlayerBoard 
                     player={1}
                     cards={player1} 
-                    onClickCard={(card) => setChoiceCard(card)}
+                    onClickCard={(card) => {
+                       if(player1Turn) {
+                            setChoiceCard(card)
+                       }
+                        }}
                     />
 				</div>
             <div className={s.board}>
@@ -155,7 +171,11 @@ const BoardPage = () => {
                 <PlayerBoard
                     player={2} 
                     cards={player2}
-                    onClickCard={(card) => setChoiceCard(card)}
+                    onClickCard={(card) => {
+                       if(!player1Turn) {
+                            setChoiceCard(card)
+                      }
+                        }}
                 />
             </div>
         </div>

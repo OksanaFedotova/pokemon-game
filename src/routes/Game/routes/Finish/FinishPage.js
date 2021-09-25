@@ -6,6 +6,10 @@ import { FireBaseContext } from '../../../../context/FireBaseContext';
 
 import s from './style.module.css';
 
+const deleteExcessProperties = (obj, properties) => {
+    properties.forEach(prop => delete obj[prop]);
+}
+
 const FinishPage = () => {
     const firebase = useContext(FireBaseContext);
     const pokemonsContext = useContext(pokemonContext);
@@ -26,20 +30,27 @@ const FinishPage = () => {
       }
 
     //выбор карточки врага
-    let cardIsSelected = 0; //флаг, что карточка еще не выбрана
+    const [cardIsntChoosen, setCardIsChoosen] = useState(true); //флаг, что карточка еще не выбрана
+    
     const [pokemons2, selectCard] = useState(pokemons2Init); //начальное состояние - массив покемонов врага, обновленное состояние - массив с выбранной карточкой
 
     const takeCard = (index) => {
-        console.log(index)
+        deleteExcessProperties(pokemons2[index], ['possession', 'player']) //мне не очень нравится такое решение, но пока другое не придумала
+        firebase.addPokemons(pokemons2[index], alert('Вы получили новую карточку!'));
+
         selectCard(prevState => prevState.map((card, i) => {
             if(i === index) {
                 card.selected = true;
             }
             return card;
         })); //обновление массива
-        cardIsSelected = true; //карточка выбрана;
-        firebase.addPokemons(pokemons2[index], console.log('success'))
+       setCardIsChoosen((prevState) => {
+        const newState = false;
+        return newState;
+       })//карточка выбрана     
     }
+
+    console.log(cardIsntChoosen);
 
     return (
         <>
@@ -80,7 +91,7 @@ const FinishPage = () => {
           isActive={true}
           isSelected={selected}
           onClickCard={() => {
-              if(!cardIsSelected && pokemons1.length > pokemons2.length) { //если карточка не выбрана и игрок победил, то он забирает карточку врага
+              if(cardIsntChoosen) { //если карточка не выбрана и игрок победил, то он забирает карточку врага
                 takeCard(index)
               }
         }}
