@@ -9,9 +9,27 @@ import FinishPage from './routes/Finish/FinishPage.js';
 
 
 const GamePage = () => {
-    const [selectedPokemons, setSelectedPokemons] = useState({});
     const match = useRouteMatch();
+
+    const [player1Pokemons, setPlayer1Pokemons] = useState([]);
+    const [player2Pokemons, setPlayer2Pokemons] = useState([]);
+   
+
+    const handlePlayer1Pokemons = (pokemon) => {
+        setPlayer1Pokemons((prevState) => {
+            prevState.push(pokemon);
+            return prevState;
+        });
+    }
+
+    const handlePlayer2Pokemons = (pokemon) => {
+        setPlayer2Pokemons((prevState) => {
+            prevState.push(pokemon);
+            return prevState;
+        });
+    }
  
+    const [selectedPokemons, setSelectedPokemons] = useState({});
     const handleSelectedPokemons = (key, pokemon) => {
        setSelectedPokemons(prevState => {
            if (prevState[key]) {
@@ -26,10 +44,27 @@ const GamePage = () => {
            }
        })
     }
+
+    const clearContext = ((context1,context2)  => {
+        context1 = [];
+        context2 = [];
+    });
+
+
     return (
         <pokemonContext.Provider value={{
+            player1Pokemons: player1Pokemons,
+            addPlayer1Pokemons: handlePlayer1Pokemons,
+
+            player2Pokemons: player2Pokemons,
+            addPlayer2Pokemons: handlePlayer2Pokemons,
+
             pokemons: selectedPokemons,
-            onSelectPokemon: handleSelectedPokemons
+            onSelectPokemon: handleSelectedPokemons,
+
+            clearContext: clearContext
+
+
         }}>
         <Switch>
             <Route path={`${match.path}/`} exact component={StartPage} />
