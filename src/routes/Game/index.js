@@ -45,10 +45,7 @@ const GamePage = () => {
        })
     }
 
-    const clearContext = ((context1,context2)  => {
-        context1 = [];
-        context2 = [];
-    });
+    const clearContext = (context => context.map(item => item = []));
 
 
     return (

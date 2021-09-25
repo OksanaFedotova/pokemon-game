@@ -21,7 +21,7 @@ const FinishPage = () => {
     }
 
     const startGame = () => {
-        pokemonsContext.clearContext(pokemons1, pokemons2) //сброс контекста
+        pokemonsContext.clearContext([pokemons1, pokemons2]) //сброс контекста
         history.push('/game')
       }
 
