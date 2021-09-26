@@ -91,7 +91,7 @@ const FinishPage = () => {
           isActive={true}
           isSelected={selected}
           onClickCard={() => {
-              if(cardIsntChoosen) { //если карточка не выбрана и игрок победил, то он забирает карточку врага
+              if(cardIsntChoosen && pokemons1.length > pokemons2.length) { //если карточка не выбрана и игрок победил, то он забирает карточку врага
                 takeCard(index)
               }
         }}

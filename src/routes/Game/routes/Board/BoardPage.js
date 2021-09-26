@@ -64,8 +64,8 @@ const BoardPage = () => {
     if(Object.keys(pokemons).length === 0) {
         history.replace('/game');
     };
-    //выбор очередности
-    const [player1Turn, setTurn] = useState(true);
+    
+   // const [turn, setTurn] = useState(null); //выбор очередности
 
     const handleClickBoardPlate = async (position) => {
 
@@ -87,18 +87,12 @@ const BoardPage = () => {
             const request = await res.json();
             console.log(choiceCard, request);
             if(choiceCard.player === 1) {
-                setTurn((prevState) => {
-                    const newState = !prevState;
-                    return newState
-                })
+                //setTurn(prevState => 2) //если ходил первый, то очередь второго
                 setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id));
 
             }
             if(choiceCard.player === 2) {
-                setTurn((prevState) => {
-                    const newState = !prevState;
-                    return newState;
-                })
+                //setTurn(prevState => 1) //если ходил второй, то очередь первого
                 setPlayer2(prevState => prevState.filter(item => item.id !== choiceCard.id));
             }
     
@@ -115,7 +109,7 @@ const BoardPage = () => {
             const [count1, count2] = counterWin(board, player1, player2);
             board.forEach((card) => {
                 if(card.card.possession === 'blue') {
-                    pokemonsContext.addPlayer1Pokemons(card.card);
+                    pokemonsContext.addPlayer1Pokemons(card.card);//добаление карт для Finish Board
                 } else {
                     pokemonsContext.addPlayer2Pokemons(card.card);
                 }
@@ -138,18 +132,27 @@ const BoardPage = () => {
         }
     }, [steps]);
 
+/*
+    const makeMove = (card) => {
+        if(choiceCard) {
+            console.log(choiceCard.player, turn)
+            if (choiceCard.player === turn) {
+                setChoiceCard(card);
+            } else {
+                return false;
+            }
+        }
+        setChoiceCard(card);
+    }
 
+  */
         return (
             <div className={s.root}>
 				<div className={s.playerOne}>
                     <PlayerBoard 
                     player={1}
                     cards={player1} 
-                    onClickCard={(card) => {
-                       if(player1Turn) {
-                            setChoiceCard(card)
-                       }
-                        }}
+                    onClickCard={card => setChoiceCard(card)}
                     />
 				</div>
             <div className={s.board}>
@@ -171,11 +174,7 @@ const BoardPage = () => {
                 <PlayerBoard
                     player={2} 
                     cards={player2}
-                    onClickCard={(card) => {
-                       if(!player1Turn) {
-                            setChoiceCard(card)
-                      }
-                        }}
+                    onClickCard={card => setChoiceCard(card)}
                 />
             </div>
         </div>
