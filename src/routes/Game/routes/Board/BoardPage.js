@@ -65,17 +65,20 @@ const BoardPage = () => {
         history.replace('/game');
     };
     
-   // const [turn, setTurn] = useState(null); //выбор очередности
+  const [turn, setTurn] = useState(1); //выбор очередности
 
     const handleClickBoardPlate = async (position) => {
-
+      const isDuplicate = board.some(({card}) => {
+          return card?.id === choiceCard?.id;
+      })
+      if (isDuplicate) return;
         if(choiceCard) {
             const params = {
                 position,
                 card: choiceCard,
                 board,
             }
-
+            
             const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
                 method: 'POST',
                 headers: {
@@ -87,13 +90,12 @@ const BoardPage = () => {
             const request = await res.json();
             console.log(choiceCard, request);
             if(choiceCard.player === 1) {
-                //setTurn(prevState => 2) //если ходил первый, то очередь второго
                 setPlayer1(prevState => prevState.filter(item => item.id !== choiceCard.id));
-
+               setTurn((prevState) => prevState + 1) //если ходил первый, то очередь второго
             }
             if(choiceCard.player === 2) {
-                //setTurn(prevState => 1) //если ходил второй, то очередь первого
                 setPlayer2(prevState => prevState.filter(item => item.id !== choiceCard.id));
+               setTurn((prevState) => prevState - 1) //если ходил второй, то очередь первого
             }
     
             setBoard(request.data);
@@ -132,27 +134,15 @@ const BoardPage = () => {
         }
     }, [steps]);
 
-/*
-    const makeMove = (card) => {
-        if(choiceCard) {
-            console.log(choiceCard.player, turn)
-            if (choiceCard.player === turn) {
-                setChoiceCard(card);
-            } else {
-                return false;
-            }
-        }
-        setChoiceCard(card);
-    }
 
-  */
         return (
             <div className={s.root}>
 				<div className={s.playerOne}>
-                    <PlayerBoard 
+                    <PlayerBoard
+                    turn={turn} //очередность
                     player={1}
                     cards={player1} 
-                    onClickCard={card => setChoiceCard(card)}
+                    onClickCard={(card) => setChoiceCard(card)}
                     />
 				</div>
             <div className={s.board}>
@@ -172,9 +162,10 @@ const BoardPage = () => {
             </div>
             <div className={s.playerTwo}>
                 <PlayerBoard
+                    turn={turn}
                     player={2} 
                     cards={player2}
-                    onClickCard={card => setChoiceCard(card)}
+                    onClickCard={(card) => setChoiceCard(card)}
                 />
             </div>
         </div>

@@ -7,7 +7,7 @@ import GamePage from "./routes/Game";
 import HomePage from "./routes/Home";
 
 import { FireBaseContext } from "./context/FireBaseContext";
-import Firebase from "./services/firebase";
+import FirebaseClass from "./services/firebase";
 
 import s from './style.module.css';
 
@@ -18,7 +18,7 @@ const App = () => {
   const isPadding = location.pathname === '/' || location.pathname === '/game/board';
   
   return (
-    <FireBaseContext.Provider value={new Firebase()}>
+    <FireBaseContext.Provider value={FirebaseClass}>
       <Switch>
         <Route path="/404" render={() => (
           <h1>404 Not Found</h1>

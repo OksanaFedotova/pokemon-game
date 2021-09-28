@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router';
 import { useState, useEffect, useContext } from 'react/cjs/react.development';
 import PokemonCard from '../../../../components/PokemonCard';
-//import POKEMONS from '../../../../components/PokemonCard/pokemons.json';
+
 
 import cn from 'classnames';
 
@@ -9,28 +9,42 @@ import cn from 'classnames';
 import s from './style.module.css';
 import { FireBaseContext } from '../../../../context/FireBaseContext';
 import { pokemonContext } from '../../../../context/pokemonContext';
+import {useDispatch, useSelector} from 'react-redux';
+import {  getPokemonsAsync, selectPokemonsData, selectPokemonsLoading } from '../../../../store/pokemon';
+import { choosenPokemonsData, getSelectedPokemons } from '../../../../store/pokemonsSelect';
 
 
 const StartPage = () => {
 
   const firebase = useContext(FireBaseContext);
+  const pokemonsContext = useContext(pokemonContext);
+  const isLoading = useSelector(selectPokemonsLoading);
+  const pokemonsRedux = useSelector(selectPokemonsData);
+  const selectedPokemons = useSelector(choosenPokemonsData);
+ // console.log(pokemonsRedux);
+ 
+  const dispatch = useDispatch()
+  const history = useHistory();
   const [pokemons, setPokemons] = useState({});
 
 
-
   useEffect(() => {
+    dispatch(getPokemonsAsync());
     firebase.getPokemonSoket((pokemons) => {
       setPokemons(pokemons);
     });
     return () => firebase.offPokemonSoket();
   }, []);
-  
-  const pokemonsContext = useContext(pokemonContext);
 
+  useEffect(() => {
+    setPokemons(pokemonsRedux);
+  }, [pokemonsRedux])
 
   const  handleChageSelect = (key) => {
     const pokemon = {...pokemons[key]};
-    pokemonsContext.onSelectPokemon(key, pokemon);
+    dispatch(getSelectedPokemons({key, pokemon}))
+   // pokemonsContext.onSelectPokemon(key, pokemon);
+
 
     setPokemons(prevState => ({
       ...prevState,
@@ -40,8 +54,8 @@ const StartPage = () => {
         }
       }));
   }
+ 
   
-  const history = useHistory();
   const handleClick = () => {
     history.push('/');
   };

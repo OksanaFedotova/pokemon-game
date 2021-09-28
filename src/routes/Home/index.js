@@ -1,15 +1,17 @@
 import Header from '../../components/Header/Header';
 import Layout from '../../components/Layout/Layout';
-
+import {useHistory} from 'react-router-dom';
 
 import bg1 from './assets/bg1.jpeg';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
-const HomePage = ({ onChangePage }) => {
 
+const HomePage = () => {
+  const history = useHistory();
     const handleClickButton = () => {
-      onChangePage && onChangePage('game');
+     history.push('/game');
     };
 
     return (

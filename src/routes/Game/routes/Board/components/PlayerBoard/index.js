@@ -3,7 +3,7 @@ import PokemonCard from "../../../../../../components/PokemonCard";
 import cn from 'classnames';
 import s from "./style.module.css";
 
-const PlayerBoard = ({player, cards, onClickCard}) => {
+const PlayerBoard = ({turn, player, cards, onClickCard}) => {
     const [isSelected, setSelected] = useState(null);
     return (
         <>
@@ -13,11 +13,13 @@ const PlayerBoard = ({player, cards, onClickCard}) => {
                         [s.selected]: isSelected === item.id
                     })} 
                     onClick={() => {
+                       if(turn === player) { //проверка очередности
                         setSelected(item.id);
                         onClickCard && onClickCard({
                             player,
                             ...item})
                         }
+                    }
                     }
                     key={item.id} //пришлось добавить, так как иначе была ошибка.
                     >
