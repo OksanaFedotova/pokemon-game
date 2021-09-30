@@ -17,7 +17,7 @@ firebase.initializeApp(firebaseConfig);
 class Firebase {
   constructor() {
     this.fire = firebase;
-    this.database = firebase.database();
+    this.database = this.fire.database();
   }
 
   getPokemonSoket = (cb) => {
@@ -26,9 +26,8 @@ class Firebase {
     })
   }
 
-  offPokemonSoket = (cb) => {
+  offPokemonSoket = () => {
     this.database.ref('pokemons').off();
-    })
   }
   getPokemonsOnce = async () => {
     return await this.database.ref('pokemons').once('value').then(snapshot => snapshot.val());

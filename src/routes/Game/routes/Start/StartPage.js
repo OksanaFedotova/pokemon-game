@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router';
 import { useState, useEffect, useContext } from 'react/cjs/react.development';
 import PokemonCard from '../../../../components/PokemonCard';
-import POKEMONS from '../../../../components/PokemonCard/pokemons.json';
+//import POKEMONS from '../../../../components/PokemonCard/pokemons.json';
 
 import cn from 'classnames';
 
@@ -14,17 +14,33 @@ import { pokemonContext } from '../../../../context/pokemonContext';
 const StartPage = () => {
 
   const firebase = useContext(FireBaseContext);
-  const pokemonsContext = useContext(pokemonContext);
+  const [pokemons, setPokemons] = useState({});
+
+
 
   useEffect(() => {
     firebase.getPokemonSoket((pokemons) => {
-      getPokemons(pokemons);
+      setPokemons(pokemons);
     });
     return () => firebase.offPokemonSoket();
-  });
+  }, []);
+  
+  const pokemonsContext = useContext(pokemonContext);
 
-  const [pokemons, setActive] = useState(POKEMONS);
 
+  const  handleChageSelect = (key) => {
+    const pokemon = {...pokemons[key]};
+    pokemonsContext.onSelectPokemon(key, pokemon);
+
+    setPokemons(prevState => ({
+      ...prevState,
+      [key]: {
+        ...prevState[key],
+        selected: !prevState[key].selected,
+        }
+      }));
+  }
+  
   const history = useHistory();
   const handleClick = () => {
     history.push('/');
@@ -33,28 +49,11 @@ const StartPage = () => {
     history.push('/game/board')
   }
 
-  const getPokemons = async () => {
-    const response = await firebase.getPokemonsOnce();
-    setActive(response);
-  }; 
-
-  const onClickCard = (key) => {
-    const pokemon = {...pokemons[key]};
-    pokemonsContext.onSelectPokemon(key, pokemon);
-    getPokemons(prevState => ({
-      ...prevState,
-      [key]: {
-        ...prevState[key],
-        selected: !prevState[key].selected,
-      }
-    }))
-  }
-
     return (
     <>
     <button className={s.button} 
       onClick={startGame}
-      disabled={Object.keys(pokemonsContext.pokemons).lenght < 5}
+      disabled={Object.keys(pokemonsContext.pokemons).length < 5}
     >
       Start Game</button>
     <div className={s.flex}>
@@ -62,6 +61,7 @@ const StartPage = () => {
       Object.entries(pokemons).map(([key, {name, img, id, type, values, selected}]) => 
       (
       <PokemonCard 
+      className={s.card}
       key={key} 
       name={name} 
       img={img}
@@ -72,10 +72,9 @@ const StartPage = () => {
       isSelected={selected}
       onClickCard={() => {
         if (Object.keys(pokemonsContext.pokemons).length < 5 || selected) {
-          onClickCard(key);
+          handleChageSelect(key);
         }
       }}
-      className={s.card}
       />
       )
       )}
