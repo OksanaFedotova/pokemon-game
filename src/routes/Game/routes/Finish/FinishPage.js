@@ -34,7 +34,8 @@ const FinishPage = () => {
     
     const [pokemons2, selectCard] = useState(pokemons2Init); //начальное состояние - массив покемонов врага, обновленное состояние - массив с выбранной карточкой
 
-    const takeCard = (index) => {
+    const handleClickCard = (index) => {
+      if(cardIsntChoosen  && pokemons1.length > pokemons2.length) {   //если карточка не выбрана и игрок победил, то он забирает карточку врага
         deleteExcessProperties(pokemons2[index], ['possession', 'player']) //мне не очень нравится такое решение, но пока другое не придумала
         firebase.addPokemons(pokemons2[index], alert('Вы получили новую карточку!'));
 
@@ -47,7 +48,8 @@ const FinishPage = () => {
        setCardIsChoosen((prevState) => {
         const newState = false;
         return newState;
-       })//карточка выбрана     
+       })//карточка выбрана  
+      }   
     }
 
     console.log(cardIsntChoosen);
@@ -90,11 +92,7 @@ const FinishPage = () => {
           values={values}  
           isActive={true}
           isSelected={selected}
-          onClickCard={() => {
-              if(cardIsntChoosen && pokemons1.length > pokemons2.length) { //если карточка не выбрана и игрок победил, то он забирает карточку врага
-                takeCard(index)
-              }
-        }}
+          onClickCard={() => {handleClickCard(index)}}
           />
           )
           )}
