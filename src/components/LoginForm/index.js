@@ -16,6 +16,14 @@ const LoginForm = ({onSubmit}) => {
         setEmail('');
         setPassword('');
     }
+    const handleEmail = (event) => {
+        setEmail(event.target.value)
+    }
+
+    const handlePassword = (event) => {
+        setPassword(event.target.value)
+    }
+
     return (
         <form onSubmit={handleSubmit}>
             <div>
@@ -23,7 +31,7 @@ const LoginForm = ({onSubmit}) => {
                     type="text" 
                     name="Email"
                     value={email}
-                    onChange={(val) => {console.log(val)}}
+                    onChange={handleEmail}
                 />
             </div>
             <div>
@@ -31,7 +39,7 @@ const LoginForm = ({onSubmit}) => {
                     value={password}
                     type="password" 
                     name="Password" 
-                    onChange={(val) => {console.log(val)}}/>
+                    onChange={handlePassword}/>
             </div>
             <button>
                 Login
@@ -41,6 +49,3 @@ const LoginForm = ({onSubmit}) => {
 }
 export default LoginForm
 
-//(e) => setPassword(e.target.value)
-//(event) => console.log(event)
-//(e) => setEmail(e.target.value)
