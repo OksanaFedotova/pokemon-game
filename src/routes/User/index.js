@@ -10,6 +10,7 @@ const User = () => {
 
     const handleClick = () => {
         dispatch(removeUser());
+        localStorage.clear();
         history.push('/')
     }
     return (

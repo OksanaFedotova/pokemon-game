@@ -41,14 +41,12 @@ const MenuHeader = ({bgActive}) => {
     };
 
     const handleSubmitLoginForm = async ({email, password, type}) => {
-   
         const response = await loginSignupUser({email, password, type});
         if(response.hasOwnProperty('error')) {
             NotificationManager.error(response.error.message, 'Wrong!');
         } else {
             if(type === 'signup') {
                 const pokemonsStart = await fetch ('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then(res => res.json())
-                console.log(pokemonsStart);
                 for (const pokemon of pokemonsStart.data) {
                     await fetch(`https://pokemon-game-d7cd7-default-rtdb.firebaseio.com/${response.localId}/pokemons.json?auth=${response.idToken}`, {
                         method: "POST",
