@@ -18,7 +18,7 @@ const handleSelectedPokemons = (state, { payload: { key, pokemon } }) => {
     }
 }
 
-export const slice2 = createSlice({
+export const slice = createSlice({
     name: 'pokemonsSelected',
     initialState: {
         selectedPokemons: {}
@@ -30,10 +30,10 @@ export const slice2 = createSlice({
 });
 
 
-export const {getSelectedPokemons, clean} = slice2.actions;
+export const {getSelectedPokemons, clean} = slice.actions;
 
-export const selectPokemonsData = state => state.pokemons.selectedPokemons;
+export const selectPokemonsData = state => state.pokemonsSelect.selectedPokemons;
 
 
-export default slice2.reducer;
+export default slice.reducer;
 
