@@ -10,7 +10,7 @@ import s from './style.module.css';
 import { FireBaseContext } from '../../../../context/FireBaseContext';
 import { pokemonContext } from '../../../../context/pokemonContext';
 import {useDispatch, useSelector} from 'react-redux';
-import {  getPokemonsAsync, selectPokemonsData, selectPokemonsLoading } from '../../../../store/pokemon';
+import {  getPokemonsAsync, selectPokemonsData, selectPokemonsLoading } from '../../../../store/pokemons';
 import { choosenPokemonsData, getSelectedPokemons } from '../../../../store/pokemonsSelect';
 
 
@@ -18,10 +18,10 @@ const StartPage = () => {
 
   const firebase = useContext(FireBaseContext);
   const pokemonsContext = useContext(pokemonContext);
-  const isLoading = useSelector(selectPokemonsLoading);
+  //const isLoading = useSelector(selectPokemonsLoading);
   const pokemonsRedux = useSelector(selectPokemonsData);
   const selectedPokemons = useSelector(choosenPokemonsData);
- // console.log(pokemonsRedux);
+ 
  
   const dispatch = useDispatch()
   const history = useHistory();
@@ -43,7 +43,7 @@ const StartPage = () => {
   const  handleChageSelect = (key) => {
     const pokemon = {...pokemons[key]};
     dispatch(getSelectedPokemons({key, pokemon}))
-   // pokemonsContext.onSelectPokemon(key, pokemon);
+    pokemonsContext.onSelectPokemon(key, pokemon);
 
 
     setPokemons(prevState => ({
