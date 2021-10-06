@@ -10,7 +10,7 @@ const User = () => {
 
     const handleClick = () => {
         dispatch(removeUser());
-        localStorage.clear();
+        localStorage.removeItem('idToken');
         history.push('/')
     }
     return (
