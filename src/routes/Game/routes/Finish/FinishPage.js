@@ -1,10 +1,13 @@
 import { useContext, useState } from 'react/cjs/react.development';
 import { useHistory } from 'react-router-dom';
-import { pokemonContext } from '../../../../context/pokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
-import { FireBaseContext } from '../../../../context/FireBaseContext';
-import { selectLocalId } from '../../../../store/user';
-import { useSelector } from 'react-redux';
+//import { FireBaseContext } from '../../../../context/FireBaseContext';
+import  FirebaseClass  from '../../../../services/firebase'
+//import { selectLocalId } from '../../../../store/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPlayerPokemons, clearPlayerPokemons } from '../../../../store/playerPokemons';
+import { selectEnemyPokemons, clearEnemyPokemons } from '../../../../store/enemyPokemons';
+
 
 import s from './style.module.css';
 
@@ -13,13 +16,15 @@ const deleteExcessProperties = (obj, properties) => {
 }
 
 const FinishPage = () => {
-    const firebase = useContext(FireBaseContext);
-    const pokemonsContext = useContext(pokemonContext);
-    const localId = useSelector(selectLocalId);
+    const firebase = FirebaseClass; 
+    console.log(firebase)
+    const dispatch = useDispatch();
+    //const localId = useSelector(selectLocalId);
 
-    const pokemons1 = pokemonsContext.player1Pokemons; //массив своих покемонов 
-    const pokemons2Init = pokemonsContext.player2Pokemons; //массив покемонов врага
-    
+    const pokemons1 = useSelector(selectPlayerPokemons); //массив своих покемонов 
+    const pokemons2Init = useSelector(selectEnemyPokemons); //массив покемонов врага
+  //  console.log(pokemons2)
+   
     //навигация
     const history = useHistory();
 
@@ -28,19 +33,22 @@ const FinishPage = () => {
     }
 
     const startGame = () => {
-        pokemonsContext.clearContext([pokemons1, pokemons2]) //сброс контекста
+        dispatch(clearPlayerPokemons(pokemons1));
+        dispatch(clearEnemyPokemons(pokemons2));
         history.push('/game')
       }
 
     //выбор карточки врага
     const [cardIsntChoosen, setCardIsChoosen] = useState(true); //флаг, что карточка еще не выбрана
     
+  
     const [pokemons2, selectCard] = useState(pokemons2Init); //начальное состояние - массив покемонов врага, обновленное состояние - массив с выбранной карточкой
-
+   
+    //видимо, это надо переписать с использованием dispatch:
     const handleClickCard = (index) => {
-      if(cardIsntChoosen  && pokemons1.length > pokemons2.length) {   //если карточка не выбрана и игрок победил, то он забирает карточку врага
+     if(cardIsntChoosen) {   //если карточка не выбрана и игрок победил, то он забирает карточку врага
         deleteExcessProperties(pokemons2[index], ['possession', 'player']) //мне не очень нравится такое решение, но пока другое не придумала
-        firebase.addPokemons(pokemons2[index], localId, alert('Вы получили новую карточку!'));
+        firebase.addPokemons(pokemons2[index]);
 
         selectCard(prevState => prevState.map((card, i) => {
             if(i === index) {
@@ -60,7 +68,7 @@ const FinishPage = () => {
         <>
         <div className={s.flex}>
           {
-          pokemons1.map(({name, img, id, type, values, selected}) => 
+          pokemons1.map(({name, img, id, type, values}) => 
           (
           <PokemonCard 
           className={s.card}

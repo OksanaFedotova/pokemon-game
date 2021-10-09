@@ -1,27 +1,20 @@
 import { useHistory } from 'react-router';
-import { useState, useEffect, useContext } from 'react/cjs/react.development';
-import PokemonCard from '../../../../components/PokemonCard';
+import { useState, useEffect } from 'react/cjs/react.development';
+import { useDispatch, useSelector } from 'react-redux';
+import {  getPokemonsAsync, selectPokemonsData} from '../../../../store/pokemons';
+import { selectPlayer1Data, getSelectedPokemons } from '../../../../store/pokemonsSelect';
 
+import PokemonCard from '../../../../components/PokemonCard';
 
 import cn from 'classnames';
 
-
 import s from './style.module.css';
-import { FireBaseContext } from '../../../../context/FireBaseContext';
-import { pokemonContext } from '../../../../context/pokemonContext';
-import {useDispatch, useSelector} from 'react-redux';
-import {  getPokemonsAsync, selectPokemonsData} from '../../../../store/pokemons';
-//import { choosenPokemonsData, getSelectedPokemons } from '../../../../store/pokemonsSelect';
-
 
 const StartPage = () => {
 
-  const firebase = useContext(FireBaseContext);
-  const pokemonsContext = useContext(pokemonContext);
   const pokemonsRedux = useSelector(selectPokemonsData);
-  //const selectedPokemons = useSelector(choosenPokemonsData);
- 
- 
+  const selectedPokemons = useSelector(selectPlayer1Data);
+
   const dispatch = useDispatch()
   const history = useHistory();
   const [pokemons, setPokemons] = useState({});
@@ -37,8 +30,7 @@ const StartPage = () => {
 
   const  handleChageSelect = (key) => {
     const pokemon = {...pokemons[key]};
-    //dispatch(getSelectedPokemons({key, pokemon}))
-    pokemonsContext.onSelectPokemon(key, pokemon);
+    dispatch(getSelectedPokemons({key, pokemon}))
     setPokemons(prevState => ({
       ...prevState,
       [key]: {
@@ -60,7 +52,7 @@ const StartPage = () => {
     <>
     <button className={s.button} 
       onClick={startGame}
-      disabled={Object.keys(pokemonsContext.pokemons).length < 5}
+      disabled={Object.keys(selectedPokemons).length < 5}
     >
       Start Game</button>
     <div className={s.flex}>
@@ -78,7 +70,7 @@ const StartPage = () => {
       isActive={true}
       isSelected={selected}
       onClickCard={() => {
-        if (Object.keys(pokemonsContext.pokemons).length < 5 || selected) {
+        if (Object.keys(selectedPokemons).length < 5 || selected) {
           handleChageSelect(key);
         }
       }}

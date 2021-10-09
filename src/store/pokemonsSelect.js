@@ -10,7 +10,7 @@ const handleSelectedPokemons = (state, { payload: { key, pokemon } }) => {
     }
     return {
         ...state,
-       selectedPokemons: {
+        selectedPokemons: {
            ...state.selectedPokemons, 
            [key]: {
                ...pokemon
@@ -19,20 +19,20 @@ const handleSelectedPokemons = (state, { payload: { key, pokemon } }) => {
 }
 
 export const slice = createSlice({
-    name: 'pokemonsSelected',
+    name: 'pokemonsSelect',
     initialState: {
         selectedPokemons: {}
     },
     reducers: {
         getSelectedPokemons: handleSelectedPokemons,
-        clean: (state) => ({...state, initialState: {}})
+        clear: state => ({...state, selectedPokemons: {}})
     }
 });
 
 
-export const {getSelectedPokemons, clean} = slice.actions;
+export const {getSelectedPokemons, clear} = slice.actions;
 
-export const selectPokemonsData = state => state.pokemonsSelect.selectedPokemons;
+export const selectPlayer1Data = state => state.pokemonsSelect?.selectedPokemons;
 
 
 export default slice.reducer;
