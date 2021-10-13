@@ -5,6 +5,7 @@ import s from "./style.module.css";
 
 const PlayerBoard = ({turn, player, cards, onClickCard}) => {
     const [isSelected, setSelected] = useState(null);
+
     return (
         <>
              {
@@ -13,7 +14,9 @@ const PlayerBoard = ({turn, player, cards, onClickCard}) => {
                         [s.selected]: isSelected === item.id
                     })} 
                     onClick={() => {
-                       if(turn === player) { //проверка очередности
+                       if(turn === player) {
+                        //проверка очередности
+                        console.log(turn, player, isSelected)
                         setSelected(item.id);
                         onClickCard && onClickCard({
                             player,

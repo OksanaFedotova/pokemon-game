@@ -1,3 +1,4 @@
+
 class Firebase {
   constructor() {
     this.host = 'https://pokemon-game-d7cd7-default-rtdb.firebaseio.com/';
@@ -26,12 +27,13 @@ class Firebase {
     }
   }
 
-  addPokemons = async (data, cb) => {
+  addPokemons = async (data) => {
     const res = await fetch(`${this.host}/${this.localId}/pokemons.json?auth=${this.token}`, {
       method: "POST",
       body: JSON.stringify(data)
     }).then(res => res.json());
-    console.log(res)
+    console.log(this.token)
+   // cb();
     return res;
   }
 

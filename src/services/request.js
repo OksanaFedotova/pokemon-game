@@ -22,7 +22,10 @@ class Request {
         return await fetch(`${this.host}/pokemons/game`, {
             method: 'POST',
             body: JSON.stringify(data)
-        }).then(res => res.json());
+        }).then(res => {
+            console.log('sent')
+           return res.json()
+        });
     }
 }
 
