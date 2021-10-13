@@ -45,14 +45,18 @@ const StartPage = () => {
     history.push('/');
   };
   const startGame = () => {
-    history.push('/game/board')
+    history.push('/game/board');
+  };
+  const getSize = (obj) => {
+     const size = obj? Object.keys(obj).length: 0;
+     return size;
   }
 
     return (
     <>
     <button className={s.button} 
       onClick={startGame}
-      disabled={Object.keys(selectedPokemons).length < 5}
+      disabled={getSize(selectedPokemons) < 5}
     >
       Start Game</button>
     <div className={s.flex}>
@@ -70,9 +74,12 @@ const StartPage = () => {
       isActive={true}
       isSelected={selected}
       onClickCard={() => {
-        if (Object.keys(selectedPokemons).length < 5 || selected) {
-          handleChageSelect(key);
-        }
+        
+          if (getSize(selectedPokemons) < 5 || selected) {
+            handleChageSelect(key);
+          }
+
+        
       }}
       />
       )
