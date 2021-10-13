@@ -1,8 +1,10 @@
-import { useContext, useEffect, useState } from 'react/cjs/react.development';
+import { useContext, useState } from 'react/cjs/react.development';
 import { useHistory } from 'react-router-dom';
 import { pokemonContext } from '../../../../context/pokemonContext';
 import PokemonCard from '../../../../components/PokemonCard';
 import { FireBaseContext } from '../../../../context/FireBaseContext';
+import { selectLocalId } from '../../../../store/user';
+import { useSelector } from 'react-redux';
 
 import s from './style.module.css';
 
@@ -13,6 +15,7 @@ const deleteExcessProperties = (obj, properties) => {
 const FinishPage = () => {
     const firebase = useContext(FireBaseContext);
     const pokemonsContext = useContext(pokemonContext);
+    const localId = useSelector(selectLocalId);
 
     const pokemons1 = pokemonsContext.player1Pokemons; //массив своих покемонов 
     const pokemons2Init = pokemonsContext.player2Pokemons; //массив покемонов врага
@@ -37,7 +40,7 @@ const FinishPage = () => {
     const handleClickCard = (index) => {
       if(cardIsntChoosen  && pokemons1.length > pokemons2.length) {   //если карточка не выбрана и игрок победил, то он забирает карточку врага
         deleteExcessProperties(pokemons2[index], ['possession', 'player']) //мне не очень нравится такое решение, но пока другое не придумала
-        firebase.addPokemons(pokemons2[index], alert('Вы получили новую карточку!'));
+        firebase.addPokemons(pokemons2[index], localId, alert('Вы получили новую карточку!'));
 
         selectCard(prevState => prevState.map((card, i) => {
             if(i === index) {
@@ -52,7 +55,6 @@ const FinishPage = () => {
       }   
     }
 
-    console.log(cardIsntChoosen);
 
     return (
         <>

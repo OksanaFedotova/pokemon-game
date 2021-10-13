@@ -1,5 +1,7 @@
 import firebase from 'firebase/compat/app';
-import "firebase/compat/database"
+import "firebase/compat/database";
+
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyAFfakVfKBqJlmGqcUJE7ar-UaarQuY4IY",
@@ -13,6 +15,8 @@ const firebaseConfig = {
   };
   
 firebase.initializeApp(firebaseConfig);
+
+
 
 class Firebase {
   constructor() {
@@ -37,9 +41,9 @@ class Firebase {
     this.database.ref(`pokemons/${key}`).set(pokemon);
   }
   
-  addPokemons = (data, cb) => {
-    const newKey = this.database.ref().child('pokemons').push().key;
-    this.database.ref('pokemons/' + newKey).set(data).then(() => cb);
+  addPokemons = (data, localId, cb) => {
+      const newKey = this.database.ref().child('pokemons').push().key;
+      this.database.ref(`${localId}/pokemons/` + newKey).set(data).then(() => cb);
   }
 }
 

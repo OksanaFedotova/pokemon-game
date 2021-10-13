@@ -10,17 +10,16 @@ import s from './style.module.css';
 import { FireBaseContext } from '../../../../context/FireBaseContext';
 import { pokemonContext } from '../../../../context/pokemonContext';
 import {useDispatch, useSelector} from 'react-redux';
-import {  getPokemonsAsync, selectPokemonsData, selectPokemonsLoading } from '../../../../store/pokemons';
-import { choosenPokemonsData, getSelectedPokemons } from '../../../../store/pokemonsSelect';
+import {  getPokemonsAsync, selectPokemonsData} from '../../../../store/pokemons';
+//import { choosenPokemonsData, getSelectedPokemons } from '../../../../store/pokemonsSelect';
 
 
 const StartPage = () => {
 
   const firebase = useContext(FireBaseContext);
   const pokemonsContext = useContext(pokemonContext);
-  //const isLoading = useSelector(selectPokemonsLoading);
   const pokemonsRedux = useSelector(selectPokemonsData);
-  const selectedPokemons = useSelector(choosenPokemonsData);
+  //const selectedPokemons = useSelector(choosenPokemonsData);
  
  
   const dispatch = useDispatch()
@@ -30,22 +29,16 @@ const StartPage = () => {
 
   useEffect(() => {
     dispatch(getPokemonsAsync());
-    firebase.getPokemonSoket((pokemons) => {
-      setPokemons(pokemons);
-    });
-    return () => firebase.offPokemonSoket();
   }, []);
 
   useEffect(() => {
     setPokemons(pokemonsRedux);
-  }, [pokemonsRedux])
+  }, [pokemonsRedux]);
 
   const  handleChageSelect = (key) => {
     const pokemon = {...pokemons[key]};
-    dispatch(getSelectedPokemons({key, pokemon}))
+    //dispatch(getSelectedPokemons({key, pokemon}))
     pokemonsContext.onSelectPokemon(key, pokemon);
-
-
     setPokemons(prevState => ({
       ...prevState,
       [key]: {
