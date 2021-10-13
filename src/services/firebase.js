@@ -1,50 +1,40 @@
-import firebase from 'firebase/compat/app';
-import "firebase/compat/database";
-
-
-
-const firebaseConfig = {
-    apiKey: "AIzaSyAFfakVfKBqJlmGqcUJE7ar-UaarQuY4IY",
-    authDomain: "pokemon-game-d7cd7.firebaseapp.com",
-    databaseURL: "https://pokemon-game-d7cd7-default-rtdb.firebaseio.com",
-    projectId: "pokemon-game-d7cd7",
-    storageBucket: "pokemon-game-d7cd7.appspot.com",
-    messagingSenderId: "418744436137",
-    appId: "1:418744436137:web:e78e1330fe6dfc722030b8",
-    measurementId: "G-EG2CZBPQSH"
-  };
-  
-firebase.initializeApp(firebaseConfig);
-
-
-
 class Firebase {
   constructor() {
-    this.fire = firebase;
-    this.database = this.fire.database();
+    this.host = 'https://pokemon-game-d7cd7-default-rtdb.firebaseio.com/';
+    this.localId = null;
   }
 
-  getPokemonSoket = (cb) => {
-    this.database.ref('pokemons').on('value', (snapshot) => {
-      cb(snapshot.val());
-    })
+  token = () => localStorage.getItem('idToken');
+
+  setLocalId = (localId) => {
+    this.localId = localId;
+  }  
+
+  checkLocalId() {
+    if(!this.localId) {
+      throw new Error ('Local ID doesn\'t exist');
+    }
   }
 
-  offPokemonSoket = () => {
-    this.database.ref('pokemons').off();
+  getPokemons = async () => {
+    try {
+      this.checkLocalId();
+      const res = await fetch(`${this.host}/${this.localId}/pokemons.json?auth=${this.token}`).then(res => res.json());
+      return res;
+    } catch (e) {
+      alert (e)
+    }
   }
-  getPokemonsOnce = async () => {
-    return await this.database.ref('pokemons').once('value').then(snapshot => snapshot.val());
-  };
 
-  postPokemon = (key, pokemon) => {
-    this.database.ref(`pokemons/${key}`).set(pokemon);
+  addPokemons = async (data, cb) => {
+    const res = await fetch(`${this.host}/${this.localId}/pokemons.json?auth=${this.token}`, {
+      method: "POST",
+      body: JSON.stringify(data)
+    }).then(res => res.json());
+    console.log(res)
+    return res;
   }
-  
-  addPokemons = (data, localId, cb) => {
-      const newKey = this.database.ref().child('pokemons').push().key;
-      this.database.ref(`${localId}/pokemons/` + newKey).set(data).then(() => cb);
-  }
+
 }
 
 const FirebaseClass = new Firebase();
