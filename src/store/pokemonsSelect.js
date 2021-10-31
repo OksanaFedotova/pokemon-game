@@ -3,8 +3,12 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const handleSelectedPokemons = (state, { payload: { key, pokemon } }) => {
     if(state.selectedPokemons[key]) {
-        const copyState = {...state.selectedPokemons};
-        delete copyState[key];
+        const copyState = {...state,
+            selectedPokemons: {
+                ...state.selectedPokemons, 
+            }
+        };
+        delete copyState.selectedPokemons[key];
 
         return copyState
     }

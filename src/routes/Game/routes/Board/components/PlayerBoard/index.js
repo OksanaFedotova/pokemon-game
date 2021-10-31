@@ -14,9 +14,7 @@ const PlayerBoard = ({turn, player, cards, onClickCard}) => {
                         [s.selected]: isSelected === item.id
                     })} 
                     onClick={() => {
-                       if(turn === player) {
-                        //проверка очередности
-                        console.log(turn, player, isSelected)
+                       if(turn === player) { //проверка очередности
                         setSelected(item.id);
                         onClickCard && onClickCard({
                             player,
@@ -24,7 +22,7 @@ const PlayerBoard = ({turn, player, cards, onClickCard}) => {
                         }
                     }
                     }
-                    key={item.id} //пришлось добавить, так как иначе была ошибка.
+                    key={item.id} 
                     >
                         <PokemonCard 
                             key={item.id} 

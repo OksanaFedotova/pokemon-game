@@ -23,7 +23,7 @@ class Request {
             method: 'POST',
             body: JSON.stringify(data)
         }).then(res => {
-            console.log('sent')
+            console.log(res)
            return res.json()
         });
     }

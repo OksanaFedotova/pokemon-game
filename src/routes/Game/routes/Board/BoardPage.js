@@ -1,14 +1,17 @@
-import PlayerBoard from './components/PlayerBoard';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react/cjs/react.development';
 import { useHistory } from 'react-router-dom';
-import PokemonCard from '../../../../components/PokemonCard';
-import s from './style.module.css';
 import { selectPlayer1Data, clear } from '../../../../store/pokemonsSelect';
 import { selectPokemonsData } from '../../../../store/pokemons';
-import request from '../../../../services/request';
 import { addPlayerPokemons } from '../../../../store/playerPokemons';
 import { addEnemyPokemons } from '../../../../store/enemyPokemons';
+import PlayerBoard from './components/PlayerBoard';
+import Arrow from './components/Arrow/Arrow';
+import PokemonCard from '../../../../components/PokemonCard';
+import request from '../../../../services/request';
+
+import s from './style.module.css';
+
 
 
 const counterWin = (board, player1, player2) => {
@@ -45,11 +48,10 @@ const returnBoard = (board) => {
 }
 
 const getStartSide = () => {
-    console.log('side')
-    return Math.floor(Math.random() * 2 + 1)
+   return Math.floor(Math.random() * 2 + 1)
+   //return 2;
 }
 
-//const startSide = getStartSide(); 
 
 let game;
 
@@ -59,9 +61,9 @@ const BoardPage = () => {
     const pokemonsSelector = useSelector(selectPokemonsData) //все покемоны игрока
     const pokemons  = useSelector(selectPlayer1Data);  //выбранные покемоны игрока
     const history = useHistory();
-  //  const [startSide, setStartSide] = useState([]); //выбор, кто начинает
     const [turn, setTurn] = useState([]);
     const [board, setBoard] = useState([]);
+    const [isFirstMove, setMove] = useState(true)
     const [player1, setPlayer1] = useState(() => {
         return Object.values(pokemons).map(item => ({
                 ...item,
@@ -101,51 +103,49 @@ const BoardPage = () => {
         setTurn(getStartSide());
     }, [])
     
-    console.log(turn)
 
-    const [serverBoard, setServerBoard] = useState([0,0,0, 0,0,0, 0,0,0])
+    const [serverBoard, setServerBoard] = useState([0,0,0, 0,0,0, 0,0,0]);
+      //параметры для запроса для получения первого хода от АИ
+      let params = {
+        currentPlayer: 'p2',
+        hands: {
+            p1: player1,
+            p2: player2
+        },
+        move: null,
+        board: serverBoard,
+    }
 
+    //опеределение функции хода АИ
+    const getAiMove = () => {
+        const idAi = game.move.poke.id; 
+            setPlayer2(prevState => prevState.map(item => {
+                if(item.id === idAi) {
+                    return {
+                        ...item,
+                        isSelected: true,
+                    }
+                }
+                return item
+                }));
+        
+        if (idAi) {
+            setTurn(turn => 1);
+            setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
+            setServerBoard(game.board);
+            setTimeout(() => setBoard(returnBoard(game.board)), 500);
+            setSteps(prevState => {
+            const count = prevState + 1;
+            return count;
+            });
+        }}
+
+
+  
     //клик на доску
     const handleClickBoardPlate = async (position) => {
-
-        //параметры для запроса для получения первого хода от АИ
-        let params = {
-            currentPlayer: 'p2',
-            hands: {
-                p1: player1,
-                p2: player2
-            },
-            move: null,
-            board: serverBoard,
-        }
-
-        //опеределение функции хода АИ
-        const getAiMove = () => {
-            console.log('aiMove');
-            const idAi = game.move.poke.id; 
+        setMove(() => false);
       
-                setPlayer2(prevState => prevState.map(item => {
-                    if(item.id === idAi) {
-                        return {
-                            ...item,
-                            isSelected: true,
-                        }
-                    }
-                    return item
-                    }));
-            
-                
-            if (idAi) {
-                setTurn(turn => 1);
-                setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
-                setServerBoard(game.board);
-                setBoard(returnBoard(game.board));
-                setSteps(prevState => {
-                const count = prevState + 1;
-                return count;
-                });
-            }}
-
         //если первый ход АИ
         if (steps === 0 && turn === 2) {
             game = await request.game(params);
@@ -191,7 +191,6 @@ const BoardPage = () => {
                 });
 
             if (steps < 8) {
-
                 getAiMove()
             }
         }
@@ -242,6 +241,10 @@ const BoardPage = () => {
                     }}/>
 				</div>
             <div className={s.board}>
+                <Arrow
+                turn={turn}
+                isFirstMove={isFirstMove}
+                />
                 {
                     board.map((item) => {
                         return (
@@ -261,7 +264,6 @@ const BoardPage = () => {
                     turn={turn}
                     player={2} 
                     cards={player2}
-                   // onClickCard={(card) => setChoiceCard(card)}
                 />
             </div>
         </div>

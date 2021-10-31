@@ -25,7 +25,10 @@
   color: #fafafa;
   cursor: default;
 }
-
+.logo {
+  width: 5%;
+  margin-top: -15%;
+}
 /***** Menu Button *****/
 .menuButton {
   position: relative;
