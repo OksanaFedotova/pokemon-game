@@ -42,7 +42,7 @@ const FinishPage = () => {
     const [cardIsntChoosen, setCardIsChoosen] = useState(true); //флаг, что карточка еще не выбрана
    
     const handleClickCard = (index) => {
-     if(cardIsntChoosen ) {   //если карточка не выбрана и игрок победил, то он забирает карточку врага
+     if(cardIsntChoosen && pokemons1.length > pokemons2.length) {   //если карточка не выбрана и игрок победил, то он забирает карточку врага
        setPokemons(prevState => {
          const newState = prevState.map((pokemon, i) => {
            if(i === index) {
@@ -56,7 +56,7 @@ const FinishPage = () => {
          })
          return newState;
        })
-       firebase.addPokemons(pokemons2[index], localId, alert("Вы получили новую карточку!"));
+       firebase.addPokemons(pokemons2[index], localId, setTimeout(() => {alert("Вы получили новую карточку!")}, 500));
        setCardIsChoosen(prevState => false)//карточка выбрана  
     }   
     }

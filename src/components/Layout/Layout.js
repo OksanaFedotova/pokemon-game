@@ -1,7 +1,7 @@
 import ls from './layout.module.css';
 
 const Layout = ({title, urlBg, colorBg, children}) => {
-    const bgStyle ={
+    const bgStyle = {
         backgroundImage: `url(${urlBg})`, 
         backgroundColor: colorBg
     };

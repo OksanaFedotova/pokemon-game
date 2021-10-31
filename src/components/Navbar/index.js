@@ -6,6 +6,7 @@ import {ReactComponent as UserSVG} from './assets/user.svg';
 import { useSelector } from 'react-redux';
 import { selectUserLoading, selectLocalId } from '../../store/user';
 import { Link } from 'react-router-dom';
+import  logo  from './assets/logo.png'
 
 const Navbar = ({isActive, bgActive = false, onClickButton, onClickLogin}) => {
     const isLoadingUser = useSelector(selectUserLoading);
@@ -21,7 +22,7 @@ const Navbar = ({isActive, bgActive = false, onClickButton, onClickLogin}) => {
             })}>
                 <div className={s.navWrapper}>
                     <p className={s.brand}>
-                        LOGO
+                        <img className={s.logo} src={logo} alt={"logo"}/> 
                     </p>
                     <div className={s.loginAndMenu}>
                         {(!isLoadingUser && !localId) && (
