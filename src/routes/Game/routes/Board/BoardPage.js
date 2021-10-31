@@ -63,7 +63,7 @@ const BoardPage = () => {
     const history = useHistory();
     const [turn, setTurn] = useState([]);
     const [board, setBoard] = useState([]);
-    const [isHidden, setHidden] = useState(false)
+    const [isFirstMove, setMove] = useState(true)
     const [player1, setPlayer1] = useState(() => {
         return Object.values(pokemons).map(item => ({
                 ...item,
@@ -105,13 +105,8 @@ const BoardPage = () => {
     
 
     const [serverBoard, setServerBoard] = useState([0,0,0, 0,0,0, 0,0,0]);
-
-  
-    //клик на доску
-    const handleClickBoardPlate = async (position) => {
-        setHidden(() => true);
-        //параметры для запроса для получения первого хода от АИ
-        let params = {
+      //параметры для запроса для получения первого хода от АИ
+      let params = {
         currentPlayer: 'p2',
         hands: {
             p1: player1,
@@ -145,6 +140,12 @@ const BoardPage = () => {
             });
         }}
 
+
+  
+    //клик на доску
+    const handleClickBoardPlate = async (position) => {
+        setMove(() => false);
+      
         //если первый ход АИ
         if (steps === 0 && turn === 2) {
             game = await request.game(params);
@@ -242,7 +243,7 @@ const BoardPage = () => {
             <div className={s.board}>
                 <Arrow
                 turn={turn}
-                isHidden={isHidden}
+                isFirstMove={isFirstMove}
                 />
                 {
                     board.map((item) => {
