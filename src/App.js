@@ -48,7 +48,7 @@ const App = () => {
               <Switch>
                 <Route path="/" exact component={HomePage}/>
                 <Route path="/home" component={HomePage}/>
-                <PrivateRoute path="/game" component={GamePage}/>
+                <Route path="/game" component={GamePage}/>
                 <Route path="/about" component={AboutPage}/>
                 <PrivateRoute path="/user" component={User}/>
                <Route render={() => (
